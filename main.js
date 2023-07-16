@@ -3,22 +3,25 @@ let listaDeItens = [];
 const form = document.getElementById("form-itens");
 const itensInput = document.getElementById("receber-item");
 const ulItens = document.getElementById("lista-de-itens");
+const ulItensComprados = document.getElementById("itens-comprados");
 
 form.addEventListener("submit", function (evento) {
     evento.preventDefault();
     salvarItem();
     mostrarItem();
+    itensInput.focus();
 })
 
 function salvarItem() {
     const comprasItem = itensInput.value;
-    const checarDuplicado = listaDeItens.some((elemento) => elemento.valor.toUpperCase === comprasItem.toUpperCase);
+    const checarDuplicado = listaDeItens.some((elemento) => elemento.valor.toUpperCase() === comprasItem.toUpperCase);
 
     if (checarDuplicado) {
         alert("O item já foi adicionado.")
     } else {
         listaDeItens.push({
-            valor: comprasItem
+            valor: comprasItem,
+            checar: false
         })
     }
 }
@@ -37,5 +40,15 @@ function mostrarItem() {
         </div>
         </li>
         `
+    })
+
+    const inputCheck = document.querySelectorAll('input[type="checkbox"]');
+
+    inputCheck.forEach(i => {
+        i.addEventListener('click', (evento) => {
+            const valorDoElemento = evento.target.parentElement.parentElement.getAttribute('data-value');
+            listaDeItens[valorDoElemento].checar = evento.target.checked;
+            console.log(listaDeItens[valorDoElemento].checar);
+        })
     })
 }
